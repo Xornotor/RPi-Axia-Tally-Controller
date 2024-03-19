@@ -1,9 +1,9 @@
-use std::io::{ErrorKind, Read};
-use std::net::Ipv4Addr;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use std::error::Error;
 use std::fs::File;
 use std::io::Write;
-use std::error::Error;
+use std::io::{ErrorKind, Read};
+use std::net::Ipv4Addr;
 
 // Tally struct model
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -31,7 +31,7 @@ pub struct TallyConfig {
 // Methods for TallyConfig struct
 impl TallyConfig {
     pub fn standard() -> TallyConfig {
-        TallyConfig{
+        TallyConfig {
             consoles: vec![
                 Console {
                     id_console: 1,
@@ -67,6 +67,12 @@ impl TallyConfig {
                     gpio: 17,
                     enable: true,
                 },
+                Tally {
+                    id_console: 1,
+                    id_fader: 255,
+                    gpio: 18,
+                    enable: true,
+                },
             ],
         }
     }
@@ -81,20 +87,20 @@ impl TallyConfig {
 
 pub fn init_tally_config() -> Result<TallyConfig, Box<dyn Error>> {
     let path = "tally_config.json";
-    match File::open(path){
+    match File::open(path) {
         Ok(mut file) => {
             let mut contents = String::new();
             file.read_to_string(&mut contents)?;
             let tally_config: TallyConfig = serde_json::from_str(&contents)?;
-            return Ok(tally_config)
-        },
+            return Ok(tally_config);
+        }
         Err(err) => {
             if let ErrorKind::NotFound = err.kind() {
                 let standard = TallyConfig::standard();
                 standard.write_to_json(path)?;
-                return Ok(standard)            
+                return Ok(standard);
             } else {
-                return Err(Box::new(err))
+                return Err(Box::new(err));
             }
         }
     };
