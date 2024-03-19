@@ -35,11 +35,11 @@ impl TallyConfig {
             consoles: vec![
                 Console {
                     id_console: 1,
-                    ip_addr: Ipv4Addr::new(10, 216, 1, 133),
+                    ip_addr: Ipv4Addr::new(10, 216, 1, 131),
                 },
                 Console {
                     id_console: 2,
-                    ip_addr: Ipv4Addr::new(10, 216, 1, 134),
+                    ip_addr: Ipv4Addr::new(10, 216, 1, 132),
                 },
             ],
             tallys: vec![
