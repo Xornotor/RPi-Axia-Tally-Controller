@@ -11,7 +11,6 @@ pub fn open_socket(ip_addr: Ipv4Addr) -> Result<TcpStream, Box<dyn Error>> {
     stream.set_nonblocking(true)?;
     stream.write(&String::from("LOGIN UNIT").into_bytes())?;
     stream.write(&String::from("SUB GPI#1").into_bytes())?;
-    println!("Connected to Axia in address {}", ip_addr);
     Ok(stream)
 }
 
