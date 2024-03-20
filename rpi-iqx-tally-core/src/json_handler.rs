@@ -6,7 +6,7 @@ use std::io::{ErrorKind, Read};
 use std::net::Ipv4Addr;
 
 // Tally struct model
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct Tally {
     pub id_console: u8,
     pub id_fader: u8,
@@ -15,14 +15,14 @@ pub struct Tally {
 }
 
 // Axia Console struct model
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct Console {
     pub id_console: u8,
     pub ip_addr: Ipv4Addr,
 }
 
 // Tally Config struct model
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct TallyConfig {
     pub consoles: Vec<Console>,
     pub tallys: Vec<Tally>,

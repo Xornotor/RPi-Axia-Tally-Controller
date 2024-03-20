@@ -1,6 +1,9 @@
+use crate::json_handler::*;
 use std::error::Error;
 use std::io::{self, Read, Write};
 use std::net::{Ipv4Addr, SocketAddrV4, TcpStream};
+use std::sync::mpsc::{self, Receiver};
+use std::thread;
 use std::time::Duration;
 
 pub fn open_socket(ip_addr: Ipv4Addr) -> Result<TcpStream, Box<dyn Error>> {
@@ -28,4 +31,53 @@ pub fn read_from_socket(stream: &mut TcpStream) -> Result<Vec<String>, Box<dyn E
         result.push(line.to_string());
     }
     Ok(result)
+}
+
+pub fn start_connections(tally_cfg: TallyConfig) -> Vec<Receiver<String>> {
+    let mut receivers: Vec<Receiver<String>> = vec![];
+    for console in tally_cfg.consoles {
+        let (tx, rx) = mpsc::channel();
+        receivers.push(rx);
+        thread::spawn(move || {
+            let mut connected: bool = false;
+            loop {
+                let mut counter: u32 = 0;
+                let mut stream = match open_socket(console.ip_addr) {
+                    Ok(tcp_stream) => {
+                        if !connected {
+                            println!("Connected to Axia in address {}", console.ip_addr);
+                            connected = true;
+                        }
+                        tcp_stream
+                    }
+                    Err(_) => {
+                        connected = false;
+                        println!("Retrying to connect to {}...", console.ip_addr);
+                        continue;
+                    }
+                };
+                loop {
+                    let reading = match read_from_socket(&mut stream) {
+                        Ok(data) => data,
+                        Err(_) => {
+                            println!("Failed to read from {}; retrying...", console.ip_addr);
+                            continue;
+                        }
+                    };
+                    if reading.len() == 0 {
+                        counter += 1;
+                    } else {
+                        counter = 0;
+                    }
+                    if counter > 999999 {
+                        break;
+                    }
+                    for line in reading {
+                        let _ = tx.send(format!("Console={} {}", console.id_console, line));
+                    }
+                }
+            }
+        });
+    }
+    receivers
 }
