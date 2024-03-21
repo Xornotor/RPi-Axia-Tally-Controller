@@ -2,30 +2,26 @@ mod event_parser;
 mod gpio_driver;
 mod json_handler;
 mod lwcp_handler;
-//mod api_handler;
+mod api_handler;
+mod ctrl_thread;
 
-use crate::gpio_driver::*;
-use crate::json_handler::*;
-use crate::lwcp_handler::*;
-//use crate::api_handler::*;
+use crate::api_handler::*;
+use crate::ctrl_thread::*;
 
-//use actix_web::*;
-//use std::thread;
-use rppal::gpio::Gpio;
+use actix_web::*;
+use std::sync::{Arc, mpsc::{Sender}};
 
-fn main() {
-	// Gather Tally Config File
-	let tally_cfg = init_tally_config().expect("Error accessing tally config file");
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
 
-	// GPIO Initializing
-	let gpio = Gpio::new().expect("Failed while configuring GPIO Handler");
-	let mut tally_pins = init_gpio(&gpio, &tally_cfg).expect("Failed to init GPIO");
-	reset_all_gpio(&mut tally_pins);
-
-	let (senders, receivers) = start_connections(tally_cfg.clone());
-	
-	// Continuous message receiving and GPIO management
-	loop {
-		decode_receivers_to_gpio(&receivers, &tally_cfg, &mut tally_pins);
-	}
+	let (ctrl_handle, mut tx_ctrl_kill) = start_ctrl_thread();
+	let mut arc_tx_ctrl_kill = Arc::new(tx_ctrl_kill);
+	let mut api_tx_ctrl_kill = web::Data::from(arc_tx_ctrl_kill);
+    
+    HttpServer::new(move || {
+		App::new()
+			.app_data(web::Data::clone(&api_tx_ctrl_kill))
+			.service(stop)
+			//.service(restart)
+	}).bind(("127.0.0.1", 9000))?.run().await
 }
