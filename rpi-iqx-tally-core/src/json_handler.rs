@@ -1,10 +1,9 @@
 use serde::{Deserialize, Serialize};
 use std::error::Error;
-use std::fs::{self, File};
+use std::fs::File;
 use std::io::Write;
 use std::io::{ErrorKind, Read};
 use std::net::Ipv4Addr;
-use std::time::SystemTime;
 
 // Tally struct model
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
@@ -105,11 +104,5 @@ pub fn init_tally_config() -> Result<TallyConfig, Box<dyn Error>> {
             }
         }
     };
-}
-
-pub fn check_config_modified_time() -> Result<SystemTime, Box<dyn Error>> {
-	let path = "tally_config.json";
-	let modified = fs::metadata(path)?.modified()?;
-	Ok(modified)
 }
 
