@@ -21,7 +21,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
 		App::new()
 			.app_data(web::Data::clone(&actix_data))
-			.service(stop)
 			.service(restart)
+			.service(reconfig)
 	}).bind(("127.0.0.1", 9000))?.run().await
 }
