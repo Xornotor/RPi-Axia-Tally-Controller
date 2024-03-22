@@ -1,0 +1,44 @@
+{
+  "consoles": [
+    {
+      "id_console": 1,
+      "ip_addr": "10.216.1.131"
+    },
+    {
+      "id_console": 2,
+      "ip_addr": "10.216.1.132"
+    }
+  ],
+  "tallys": [
+    {
+      "id_console": 1,
+      "id_fader": 1,
+      "gpio": 14,
+      "enable": true
+    },
+    {
+      "id_console": 1,
+      "id_fader": 2,
+      "gpio": 15,
+      "enable": true
+    },
+    {
+      "id_console": 1,
+      "id_fader": 3,
+      "gpio": 16,
+      "enable": true
+    },
+    {
+      "id_console": 1,
+      "id_fader": 4,
+      "gpio": 17,
+      "enable": true
+    },
+    {
+      "id_console": 1,
+      "id_fader": 255,
+      "gpio": 18,
+      "enable": true
+    }
+  ]
+}
