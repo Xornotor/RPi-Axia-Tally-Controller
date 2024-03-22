@@ -46,7 +46,7 @@ pub async fn reconfig(req: HttpRequest, cfg: web::Json<TallyConfig>) -> impl Res
 	let appdata = req.app_data::<web::Data<AppData>>().unwrap();
 	appdata.kill_thread();
 	println!("Applying new configuration...");
-	cfg.write_to_json("tally_config.json");
+	let _ = cfg.write_to_json("tally_config.json");
 	println!("Restarting service...");
 	let (ctrl_handle, tx_ctrl_kill) = start_ctrl_thread();
 	appdata.update(ctrl_handle, tx_ctrl_kill);

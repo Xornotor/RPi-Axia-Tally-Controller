@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="style.css"/> 
+        <title>RPi Axia Tally Controller</title>
+    </head>
+    <body>
+        <header>
+            <h1>RPi Axia Tally Controller</h1>
+        </header>
+        <section id="form_section">
+            <hr>
+            <h3>Console Principal</h3>
+            ID Console: <input id="id_console_1" class="console_num" type="number" min="1" max="99">
+            Endereço IP: <input id="ip_addr_console_1" class="ip_addr" maxlength="15">
+            <br>
+            <h3>Console Reserva</h3>
+            ID Console: <input id="id_console_2" class="console_num" type="number" min="1" max="99">
+            Endereço IP: <input id="ip_addr_console_2" class="ip_addr" maxlength="15">
+            <br><br>
+            <hr>
+            <h4>Tally 1</h4>
+            ID Console: <input id="id_console_tally_1" class="console_num" type="number" min="1" max="2">
+            Fader:
+            <select id="fader_tally_1">
+                <option value="1">1</option>    
+                <option value="2">2</option>    
+                <option value="3">3</option>    
+                <option value="4">4</option>    
+                <option value="5">5</option>    
+                <option value="6">6</option>    
+                <option value="7">7</option>    
+                <option value="8">8</option>    
+            </select>
+            GPIO: <input id="gpio_tally_1" class="console_num" type="number" min="0" max="27">
+            Ativo: <input id="enable_tally_1" type="checkbox">
+            <br>
+            <h4>Tally 2</h4>
+            ID Console: <input id="id_console_tally_2" class="console_num" type="number" min="1" max="2">
+            Fader:
+            <select id="fader_tally_2">
+                <option value="1">1</option>    
+                <option value="2">2</option>    
+                <option value="3">3</option>    
+                <option value="4">4</option>    
+                <option value="5">5</option>    
+                <option value="6">6</option>    
+                <option value="7">7</option>    
+                <option value="8">8</option>    
+            </select>
+            GPIO: <input id="gpio_tally_2" class="console_num" type="number" min="0" max="27">
+            Ativo: <input id="enable_tally_2" type="checkbox">
+            <br>
+            <h4>Tally 3</h4>
+            ID Console: <input id="id_console_tally_3" class="console_num" type="number" min="1" max="2">
+            Fader:
+            <select id="fader_tally_3">
+                <option value="1">1</option>    
+                <option value="2">2</option>    
+                <option value="3">3</option>    
+                <option value="4">4</option>    
+                <option value="5">5</option>    
+                <option value="6">6</option>    
+                <option value="7">7</option>    
+                <option value="8">8</option>    
+            </select>
+            GPIO: <input id="gpio_tally_3" class="console_num" type="number" min="0" max="27">
+            Ativo: <input id="enable_tally_3" type="checkbox">
+            <br>
+            <h4>Tally 4</h4>
+            ID Console: <input id="id_console_tally_4" class="console_num" type="number" min="1" max="2">
+            Fader:
+            <select id="fader_tally_4">
+                <option value="1">1</option>    
+                <option value="2">2</option>    
+                <option value="3">3</option>    
+                <option value="4">4</option>    
+                <option value="5">5</option>    
+                <option value="6">6</option>    
+                <option value="7">7</option>    
+                <option value="8">8</option>    
+            </select>
+            GPIO: <input id="gpio_tally_4" class="console_num" type="number" min="0" max="27">
+            Ativo: <input id="enable_tally_4" type="checkbox">
+            <br>
+            <h4>Tally Control Room</h4>
+            ID Console: <input id="id_console_tally_5" class="console_num" type="number" min="1" max="2">
+            GPIO: <input id="gpio_tally_5" class="console_num" type="number" min="0" max="27">
+            Ativo: <input id="enable_tally_5" type="checkbox">
+            <br>
+            <br><br>
+            <hr>
+            <br>
+            <button onclick="reconfig()">Efetuar alterações</button>
+        </section>
+        <script type="text/javascript" src="scripts.js"></script>
+    </body>
+</html>
