@@ -52,3 +52,11 @@ pub async fn reconfig(req: HttpRequest, cfg: web::Json<TallyConfig>) -> impl Res
 	appdata.update(ctrl_handle, tx_ctrl_kill);
 	HttpResponse::Ok().body("Tally Controller Service Restarted.\n")
 }
+
+#[get("getconfig")]
+pub async fn getconfig() -> impl Responder {
+	match read_config_string() {
+		Ok(config) => return HttpResponse::Ok().body(config),
+		Err(_) => return HttpResponse::NotFound().body("Error 404 - Config not found\n"),
+	};
+}

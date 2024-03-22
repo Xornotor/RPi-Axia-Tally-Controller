@@ -26,5 +26,6 @@ async fn main() -> std::io::Result<()> {
 			.app_data(web::Data::clone(&actix_data))
 			.service(restart)
 			.service(reconfig)
+			.service(getconfig)
 	}).bind(("127.0.0.1", 9000))?.run().await
 }

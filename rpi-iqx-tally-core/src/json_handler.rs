@@ -106,3 +106,16 @@ pub fn init_tally_config() -> Result<TallyConfig, Box<dyn Error>> {
     };
 }
 
+pub fn read_config_string() -> Result<String, Box<dyn Error>> {
+    let path = "tally_config.json";
+    match File::open(path) {
+        Ok(mut file) => {
+            let mut contents = String::new();
+            file.read_to_string(&mut contents)?;
+            let tally_config: TallyConfig = serde_json::from_str(&contents)?;
+            let serialized = serde_json::to_string_pretty(&tally_config)?;
+            return Ok(serialized);
+        }
+        Err(err) => return Err(Box::new(err)),
+    };
+}
