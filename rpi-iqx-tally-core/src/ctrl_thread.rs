@@ -1,7 +1,6 @@
 use crate::gpio_driver::*;
 use crate::json_handler::*;
 use crate::lwcp_handler::*;
-use crate::api_handler::*;
 
 use std::thread::{self, JoinHandle};
 use rppal::gpio::Gpio;
@@ -19,7 +18,7 @@ pub fn start_ctrl_thread() -> (Box<JoinHandle<()>>, Sender<String>) {
 		let mut tally_pins = init_gpio(&gpio, &tally_cfg).expect("Failed to init GPIO");
 		reset_all_gpio(&mut tally_pins);
 
-		let (senders, receivers) = start_connections(tally_cfg.clone());
+		let (senders, receivers, mut handlers) = start_connections(tally_cfg.clone());
 		
 		// Continuous message receiving and GPIO management
 		loop {
@@ -31,6 +30,13 @@ pub fn start_ctrl_thread() -> (Box<JoinHandle<()>>, Sender<String>) {
 				println!("Killing controller thread...");
 				for sender in &senders{
 					let _ = sender.send(String::from("KILL"));
+				}
+				'handler_loop: for _ in 0..handlers.len() {
+					let handler = handlers.pop();
+					let _join = match handler {
+						Some(h) => h.join(),
+						None => { break 'handler_loop; },
+					};
 				}
 				break;
 			}

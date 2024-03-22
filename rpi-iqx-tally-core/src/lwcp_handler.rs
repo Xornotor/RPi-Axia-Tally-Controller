@@ -3,7 +3,7 @@ use std::error::Error;
 use std::io::{self, Read, Write};
 use std::net::{Ipv4Addr, SocketAddrV4, TcpStream};
 use std::sync::mpsc::{self, Sender, Receiver};
-use std::thread;
+use std::thread::{self, JoinHandle};
 use std::time::Duration;
 
 pub fn open_socket(ip_addr: Ipv4Addr) -> Result<TcpStream, Box<dyn Error>> {
@@ -33,15 +33,16 @@ pub fn read_from_socket(stream: &mut TcpStream) -> Result<Vec<String>, Box<dyn E
     Ok(result)
 }
 
-pub fn start_connections(tally_cfg: TallyConfig) -> (Vec<Sender<String>>, Vec<Receiver<String>>) {
+pub fn start_connections(tally_cfg: TallyConfig) -> (Vec<Sender<String>>, Vec<Receiver<String>>, Vec<JoinHandle<()>>) {
 	let mut senders: Vec<Sender<String>> = vec![];
     let mut receivers: Vec<Receiver<String>> = vec![];
+    let mut handlers: Vec<JoinHandle<()>> = vec![];
     for console in tally_cfg.consoles {
     	let (tx_kill, rx_kill) = mpsc::channel();
         let (tx_event, rx_event) = mpsc::channel();
         senders.push(tx_kill);
         receivers.push(rx_event);
-        thread::spawn(move || {
+        let handler = thread::spawn(move || {
             let mut connected: bool = false;
             'outer_loop: loop {
             	let kill_msg = match rx_kill.try_recv() {
@@ -97,6 +98,7 @@ pub fn start_connections(tally_cfg: TallyConfig) -> (Vec<Sender<String>>, Vec<Re
                 }
             }
         });
+        handlers.push(handler);
     }
-    (senders, receivers)
+    (senders, receivers, handlers)
 }
