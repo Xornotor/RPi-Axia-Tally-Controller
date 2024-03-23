@@ -5,6 +5,7 @@ use crate::lwcp_handler::*;
 use std::thread::{self, JoinHandle};
 use rppal::gpio::Gpio;
 use std::sync::mpsc::{self, Sender};
+use std::time::Duration;
 
 pub fn start_ctrl_thread() -> (Box<JoinHandle<()>>, Sender<String>) {
 
@@ -22,6 +23,7 @@ pub fn start_ctrl_thread() -> (Box<JoinHandle<()>>, Sender<String>) {
 		
 		// Continuous message receiving and GPIO management
 		loop {
+			thread::sleep(Duration::from_micros(200));
 			let kill_msg = match rx_ctrl_kill.try_recv() {
 				Ok(recv_msg) => recv_msg,
 				Err(_) => String::new(),

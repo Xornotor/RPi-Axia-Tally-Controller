@@ -27,5 +27,5 @@ async fn main() -> std::io::Result<()> {
 			.service(restart)
 			.service(reconfig)
 			.service(getconfig)
-	}).bind(("127.0.0.1", 9000))?.run().await
+	}).bind(("0.0.0.0", 9000))?.run().await
 }

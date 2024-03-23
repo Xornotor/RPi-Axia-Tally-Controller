@@ -1,6 +1,6 @@
 async function get_config() {
     var tally_config;
-    const res = await fetch("http://127.0.0.1:9000/getconfig");
+    const res = await fetch("http://10.216.1.135:9000/getconfig");
     tally_config = await res.json();
     console.log(tally_config);
     initialFill(tally_config);
@@ -83,7 +83,7 @@ function reconfig() {
           ]
     };
 
-    fetch("http://127.0.0.1:9000/reconfig", {
+    fetch("http://10.216.1.135:9000/reconfig", {
         method: "POST",
         body: JSON.stringify(tally_config),
         headers: {

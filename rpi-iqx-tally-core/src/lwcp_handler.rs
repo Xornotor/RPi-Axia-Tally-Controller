@@ -69,6 +69,7 @@ pub fn start_connections(tally_cfg: TallyConfig) -> (Vec<Sender<String>>, Vec<Re
                     }
                 };
                 'inner_loop: loop {
+                	thread::sleep(Duration::from_micros(200));
 		            let kill_msg = match rx_kill.try_recv() {
 						Ok(recv_msg) => recv_msg,
 						Err(_) => String::new(),
