@@ -1,0 +1,92 @@
+*, html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #052029;
+    color: #ccc;
+    font-family: sans-serif;
+}
+
+header {
+    background-color: #033e52;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+h1,
+#console,
+.console_cfg,
+#tally,
+#submit-button-section
+{
+    justify-content: center;
+    text-align: center;
+}
+
+#tally {
+    margin-top: 2em;
+    margin-bottom: 3em;
+}
+
+table {
+    margin-left:auto; 
+    margin-right:auto;
+}
+
+th, td {
+    padding: .7em 2em;
+    font-size: larger;
+}
+
+th {
+    
+}
+
+input, select {
+    background-color: #cbeaf5;
+}
+
+input, select, button {
+    font-size: large;
+    padding: 5pt 8pt 5pt 8pt;
+    border-radius: 4pt;
+    border: 0pt;
+    text-align: center;
+}
+
+button {
+    background-color: #74ad42;
+    padding: 6pt 10pt 6pt 10pt;
+}
+
+button:hover {
+    background-color: #80e627;
+    padding: 6pt 10pt 6pt 10pt;
+}
+
+button:active {
+    background-color: #1c4d0b;
+}
+
+.ip_addr {
+    width: 110pt;
+}
+
+#console {
+    display: flex;
+    background-color: #022d3b;
+}
+
+.h3_ip {
+    margin-bottom: .6em;
+}
+
+.console_cfg {
+    display: inline-block;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    margin-left: 4em;
+    margin-right: 4em;
+}
