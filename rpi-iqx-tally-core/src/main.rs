@@ -2,26 +2,30 @@ mod event_parser;
 mod gpio_driver;
 mod json_handler;
 mod lwcp_handler;
+mod api_handler;
+mod ctrl_thread;
 
-use crate::gpio_driver::*;
-use crate::json_handler::*;
-use crate::lwcp_handler::*;
+use crate::api_handler::*;
+use crate::ctrl_thread::*;
 
-use rppal::gpio::Gpio;
+use actix_web::*;
+use actix_cors::Cors;
+//use std::sync::{Arc, mpsc::{Sender}};
 
-fn main() {
-    // Gather Tally Config File
-    let tally_cfg = init_tally_config().expect("Error accessing tally config file");
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
 
-    // GPIO Initializing
-    let gpio = Gpio::new().expect("Failed while configuring GPIO Handler");
-    let mut tally_pins = init_gpio(&gpio, &tally_cfg).expect("Failed to initialize GPIO");
-    reset_all_gpio(&mut tally_pins);
-
-    let receivers = start_connections(tally_cfg.clone());
-
-    // Continuous message receiving and GPIO management
-    loop {
-        decode_receivers_to_gpio(&receivers, &tally_cfg, &mut tally_pins);
-    }
+	let (ctrl_handle, tx_ctrl_kill) = start_ctrl_thread();
+	let data = AppData::new(ctrl_handle, tx_ctrl_kill);
+    let actix_data = web::Data::new(data);
+    
+    HttpServer::new(move || {
+    	let cors = Cors::permissive();
+		App::new()
+			.wrap(cors)
+			.app_data(web::Data::clone(&actix_data))
+			.service(restart)
+			.service(reconfig)
+			.service(getconfig)
+	}).bind(("0.0.0.0", 9000))?.run().await
 }

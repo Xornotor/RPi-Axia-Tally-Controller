@@ -2,8 +2,8 @@ use crate::json_handler::*;
 use std::error::Error;
 use std::io::{self, Read, Write};
 use std::net::{Ipv4Addr, SocketAddrV4, TcpStream};
-use std::sync::mpsc::{self, Receiver};
-use std::thread;
+use std::sync::mpsc::{self, Sender, Receiver};
+use std::thread::{self, JoinHandle};
 use std::time::Duration;
 
 pub fn open_socket(ip_addr: Ipv4Addr) -> Result<TcpStream, Box<dyn Error>> {
@@ -33,14 +33,26 @@ pub fn read_from_socket(stream: &mut TcpStream) -> Result<Vec<String>, Box<dyn E
     Ok(result)
 }
 
-pub fn start_connections(tally_cfg: TallyConfig) -> Vec<Receiver<String>> {
+pub fn start_connections(tally_cfg: TallyConfig) -> (Vec<Sender<String>>, Vec<Receiver<String>>, Vec<JoinHandle<()>>) {
+	let mut senders: Vec<Sender<String>> = vec![];
     let mut receivers: Vec<Receiver<String>> = vec![];
+    let mut handlers: Vec<JoinHandle<()>> = vec![];
     for console in tally_cfg.consoles {
-        let (tx, rx) = mpsc::channel();
-        receivers.push(rx);
-        thread::spawn(move || {
+    	let (tx_kill, rx_kill) = mpsc::channel();
+        let (tx_event, rx_event) = mpsc::channel();
+        senders.push(tx_kill);
+        receivers.push(rx_event);
+        let handler = thread::spawn(move || {
             let mut connected: bool = false;
-            loop {
+            'outer_loop: loop {
+            	let kill_msg = match rx_kill.try_recv() {
+				    Ok(recv_msg) => recv_msg,
+				    Err(_) => String::new(),
+				};
+				if kill_msg == String::from("KILL"){
+					println!("Killing thread for Console {}...", console.id_console);
+					break 'outer_loop;
+				}
                 let mut counter: u32 = 0;
                 let mut stream = match open_socket(console.ip_addr) {
                     Ok(tcp_stream) => {
@@ -53,15 +65,24 @@ pub fn start_connections(tally_cfg: TallyConfig) -> Vec<Receiver<String>> {
                     Err(_) => {
                         connected = false;
                         println!("Retrying to connect to {}...", console.ip_addr);
-                        continue;
+                        continue 'outer_loop;
                     }
                 };
-                loop {
+                'inner_loop: loop {
+                	thread::sleep(Duration::from_micros(200));
+		            let kill_msg = match rx_kill.try_recv() {
+						Ok(recv_msg) => recv_msg,
+						Err(_) => String::new(),
+					};
+					if kill_msg == String::from("KILL"){
+						println!("Killing thread for Console {}...", console.id_console);
+						break 'outer_loop;
+					}
                     let reading = match read_from_socket(&mut stream) {
                         Ok(data) => data,
                         Err(_) => {
                             println!("Failed to read from {}; retrying...", console.ip_addr);
-                            continue;
+                            continue 'inner_loop;
                         }
                     };
                     if reading.len() == 0 {
@@ -70,14 +91,15 @@ pub fn start_connections(tally_cfg: TallyConfig) -> Vec<Receiver<String>> {
                         counter = 0;
                     }
                     if counter > 999999 {
-                        break;
+                        break 'inner_loop;
                     }
                     for line in reading {
-                        let _ = tx.send(format!("Console={} {}", console.id_console, line));
+                        let _ = tx_event.send(format!("Console={} {}", console.id_console, line));
                     }
                 }
             }
         });
+        handlers.push(handler);
     }
-    receivers
+    (senders, receivers, handlers)
 }

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="style.css"/> 
+        <title>RPi Axia Tally Controller</title>
+    </head>
+    <body>
+        <header>
+            <h1>RPi Axia Tally Controller - v0.1.0</h1>
+        </header>
+        <section id="form_section">
+            <section id="console">
+                <div class="console_cfg">
+                <h3 class="h3_ip">IP Console Principal:</h3>
+                <input id="ip_addr_console_1" class="ip_addr" maxlength="15">
+                </div>
+                <div class="console_cfg">
+                <h3 class="h3_ip">IP Console Reserva:</h3>
+                <input id="ip_addr_console_2" class="ip_addr" maxlength="15">
+                </div>
+            </section>
+            <section id="tally">
+                <table>
+                    <tr>
+                        <th><h3>Tally</h3></th>
+                        <th><h3>Console</h3></th>
+                        <th><h3>Fader</h3></th>
+                    </tr>
+                    <tr>
+                        <td>CR (On Air)</td>
+                        <td>
+                            <select id="id_console_tally_5">
+                                <option value="1">Principal</option>    
+                                <option value="2">Reserva</option>       
+                            </select>
+                        </td>
+                        <td>
+                            <input disabled="disabled" id="gpio_tally_5" type="hidden">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Tally 1</td>
+                        <td>
+                            <select id="id_console_tally_1">
+                                <option value="1">Principal</option>    
+                                <option value="2">Reserva</option>       
+                            </select>
+                        </td>
+                        <td>
+                            <select id="fader_tally_1">
+                                <option value="1">1</option>    
+                                <option value="2">2</option>    
+                                <option value="3">3</option>    
+                                <option value="4">4</option>    
+                                <option value="5">5</option>    
+                                <option value="6">6</option>    
+                                <option value="7">7</option>    
+                                <option value="8">8</option>    
+                            </select>
+                            <input disabled="disabled" id="gpio_tally_1" type="hidden">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Tally 2</td>
+                        <td>
+                            <select id="id_console_tally_2">
+                                <option value="1">Principal</option>    
+                                <option value="2">Reserva</option>       
+                            </select>
+                        </td>
+                        <td>
+                            <select id="fader_tally_2">
+                                <option value="1">1</option>    
+                                <option value="2">2</option>    
+                                <option value="3">3</option>    
+                                <option value="4">4</option>    
+                                <option value="5">5</option>    
+                                <option value="6">6</option>    
+                                <option value="7">7</option>    
+                                <option value="8">8</option>    
+                            </select>
+                            <input disabled="disabled" id="gpio_tally_2" type="hidden">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Tally 3</td>
+                        <td>
+                            <select id="id_console_tally_3">
+                                <option value="1">Principal</option>    
+                                <option value="2">Reserva</option>       
+                            </select>
+                        </td>
+                        <td>
+                            <select id="fader_tally_3">
+                                <option value="1">1</option>    
+                                <option value="2">2</option>    
+                                <option value="3">3</option>    
+                                <option value="4">4</option>    
+                                <option value="5">5</option>    
+                                <option value="6">6</option>    
+                                <option value="7">7</option>    
+                                <option value="8">8</option>    
+                            </select>
+                            <input disabled="disabled" id="gpio_tally_3" type="hidden">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Tally 4</td>
+                        <td>
+                            <select id="id_console_tally_4">
+                                <option value="1">Principal</option>    
+                                <option value="2">Reserva</option>       
+                            </select>
+                        </td>
+                        <td>
+                            <select id="fader_tally_4">
+                                <option value="1">1</option>    
+                                <option value="2">2</option>    
+                                <option value="3">3</option>    
+                                <option value="4">4</option>    
+                                <option value="5">5</option>    
+                                <option value="6">6</option>    
+                                <option value="7">7</option>    
+                                <option value="8">8</option>    
+                            </select>
+                            <input disabled="disabled" id="gpio_tally_4" type="hidden">
+                        </td>
+                    </tr>
+                </table> 
+            </section>
+            <section id="submit-button-section">
+                <button onclick="reconfig()">Efetuar alterações</button>
+            </section>
+        </section>
+        <script type="text/javascript" src="scripts.js"></script>
+    </body>
+</html>

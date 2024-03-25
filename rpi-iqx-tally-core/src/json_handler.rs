@@ -46,31 +46,31 @@ impl TallyConfig {
                 Tally {
                     id_console: 1,
                     id_fader: 1,
-                    gpio: 14,
+                    gpio: 5,
                     enable: true,
                 },
                 Tally {
                     id_console: 1,
                     id_fader: 2,
-                    gpio: 15,
+                    gpio: 6,
                     enable: true,
                 },
                 Tally {
                     id_console: 1,
                     id_fader: 3,
-                    gpio: 16,
+                    gpio: 13,
                     enable: true,
                 },
                 Tally {
                     id_console: 1,
                     id_fader: 4,
-                    gpio: 17,
+                    gpio: 19,
                     enable: true,
                 },
                 Tally {
                     id_console: 1,
                     id_fader: 255,
-                    gpio: 18,
+                    gpio: 26,
                     enable: true,
                 },
             ],
@@ -103,5 +103,19 @@ pub fn init_tally_config() -> Result<TallyConfig, Box<dyn Error>> {
                 return Err(Box::new(err));
             }
         }
+    };
+}
+
+pub fn read_config_string() -> Result<String, Box<dyn Error>> {
+    let path = "tally_config.json";
+    match File::open(path) {
+        Ok(mut file) => {
+            let mut contents = String::new();
+            file.read_to_string(&mut contents)?;
+            let tally_config: TallyConfig = serde_json::from_str(&contents)?;
+            let serialized = serde_json::to_string_pretty(&tally_config)?;
+            return Ok(serialized);
+        }
+        Err(err) => return Err(Box::new(err)),
     };
 }
