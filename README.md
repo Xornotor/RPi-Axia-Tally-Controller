@@ -1,3 +1,3 @@
-# Raspberry Pi iQx Tally Controller
+# Raspberry Pi Axia Tally Controller
 
-Work in progress.
+Multithreaded application which connects to Axia consoles and reads ON/OFF state changes to control tally (Raspberry Pi GPIO's).
