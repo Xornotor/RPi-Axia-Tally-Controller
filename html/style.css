@@ -26,8 +26,8 @@ h1,
 }
 
 #tally {
-    margin-top: 2em;
-    margin-bottom: 3em;
+    margin-top: 1.5em;
+    margin-bottom: 1.8em;
 }
 
 table {
@@ -36,7 +36,7 @@ table {
 }
 
 th, td {
-    padding: .7em 2em;
+    padding: .4em 1.7em;
     font-size: larger;
 }
 
@@ -55,6 +55,7 @@ input, select, button {
 button {
     background-color: #74ad42;
     padding: 6pt 10pt 6pt 10pt;
+    margin-bottom: 1.5em;
 }
 
 button:hover {
@@ -81,8 +82,8 @@ button:active {
 
 .console_cfg {
     display: inline-block;
-    margin-top: 2em;
-    margin-bottom: 2em;
+    margin-top: 1.7em;
+    margin-bottom: 1.7em;
     margin-left: 4em;
     margin-right: 4em;
 }
