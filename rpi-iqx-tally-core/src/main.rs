@@ -10,7 +10,6 @@ use crate::ctrl_thread::*;
 
 use actix_web::*;
 use actix_cors::Cors;
-//use std::sync::{Arc, mpsc::{Sender}};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

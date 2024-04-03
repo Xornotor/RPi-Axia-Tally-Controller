@@ -7,7 +7,7 @@ use std::sync::mpsc::Receiver;
 pub fn init_gpio(gpio: &Gpio, tally_cfg: &TallyConfig) -> Result<Vec<OutputPin>, Box<dyn Error>> {
     let mut tally_pins: Vec<OutputPin> = vec![];
     for tally in &tally_cfg.tallys {
-        let gpio_handler = match gpio.get(tally.gpio) {
+        let gpio_handler = match gpio.get(tally.gpio_relay) {
             Ok(pin) => pin.into_output(),
             Err(e) => return Err(Box::new(e)),
         };
@@ -16,10 +16,21 @@ pub fn init_gpio(gpio: &Gpio, tally_cfg: &TallyConfig) -> Result<Vec<OutputPin>,
     Ok(tally_pins)
 }
 
-pub fn reset_all_gpio(pins: &mut Vec<OutputPin>) {
+pub fn reset_all_gpio(pins: &mut Vec<OutputPin>, tally_cfg: &TallyConfig) {
+    let mut cr_tally_pin = 0;
+    for tally in &tally_cfg.tallys {
+        if tally.id_fader == 255 {
+            cr_tally_pin = tally.gpio_relay;
+            break;
+        }
+    }
+
     for pin in pins {
-        //println!("{}", pin.pin());
-        pin.set_low();
+        if pin.pin() == cr_tally_pin {
+            pin.set_low();
+        } else {
+            pin.set_high();
+        }
     }
 }
 
@@ -43,11 +54,13 @@ pub fn decode_receivers_to_gpio(
 
         let (console_number, fader_number, state) = info_tuple;
 
+        let invert_logic = fader_number != 255;
+
         let mut tally_pin = 0;
         for tally in &tally_cfg.tallys {
             if tally.id_console == console_number && tally.id_fader == fader_number {
                 if tally.enable {
-                    tally_pin = tally.gpio;
+                    tally_pin = tally.gpio_relay;
                 }
                 break;
             }
@@ -56,9 +69,17 @@ pub fn decode_receivers_to_gpio(
             for pin in &mut tally_pins.iter_mut() {
                 if pin.pin() == tally_pin {
                     if state {
-                        pin.set_high();
+                        if invert_logic {
+                            pin.set_low();
+                        } else {
+                            pin.set_high();
+                        }
                     } else {
-                        pin.set_low();
+                        if invert_logic {
+                            pin.set_high();
+                        } else {
+                            pin.set_low();
+                        }
                     }
                     break;
                 }

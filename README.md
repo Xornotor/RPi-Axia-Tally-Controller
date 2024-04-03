@@ -29,8 +29,8 @@ The backend was developed in Rust, and consists of a multithreaded application t
 
 | **Tally**    | **RPi GPIO** |
 |--------------|--------------|
-| Tally 1      | 5            |
-| Tally 2      | 6            |
-| Tally 3      | 13           |
-| Tally 4      | 19           |
-| Control Room | 26           |
+| Tally 1      | 25           |
+| Tally 2      | 8            |
+| Tally 3      | 7            |
+| Tally 4      | 1            |
+| Control Room | 12           |

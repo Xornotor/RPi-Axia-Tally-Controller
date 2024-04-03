@@ -17,7 +17,7 @@ pub fn start_ctrl_thread() -> (Box<JoinHandle<()>>, Sender<String>) {
 		// GPIO Initializing
 		let gpio = Gpio::new().expect("Failed while configuring GPIO Handler");
 		let mut tally_pins = init_gpio(&gpio, &tally_cfg).expect("Failed to init GPIO");
-		reset_all_gpio(&mut tally_pins);
+		reset_all_gpio(&mut tally_pins, &tally_cfg);
 
 		let (senders, receivers, mut handlers) = start_connections(tally_cfg.clone());
 		
