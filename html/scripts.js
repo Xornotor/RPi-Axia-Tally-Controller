@@ -90,31 +90,31 @@ async function reconfig() {
             {
               "id_console": console_tally_1,
               "id_fader": fader_tally_1,
-              "gpio_relay": 25,
+              "gpio_relay": 19,
               "enable": true
             },
             {
               "id_console": console_tally_2,
               "id_fader": fader_tally_2,
-              "gpio_relay": 8,
+              "gpio_relay": 13,
               "enable": true
             },
             {
               "id_console": console_tally_3,
               "id_fader": fader_tally_3,
-              "gpio_relay": 7,
+              "gpio_relay": 6,
               "enable": true
             },
             {
               "id_console": console_tally_4,
               "id_fader": fader_tally_4,
-              "gpio_relay": 1,
+              "gpio_relay": 5,
               "enable": true
             },
             {
               "id_console": console_tally_cr,
               "id_fader": 255,
-              "gpio_relay": 12,
+              "gpio_relay": 26,
               "enable": true
             },
           ]
