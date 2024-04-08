@@ -10,7 +10,7 @@ use std::net::Ipv4Addr;
 pub struct Tally {
     pub id_console: u8,
     pub id_fader: u8,
-    pub gpio: u8,
+    pub gpio_relay: u8,
     pub enable: bool,
 }
 
@@ -46,31 +46,31 @@ impl TallyConfig {
                 Tally {
                     id_console: 1,
                     id_fader: 1,
-                    gpio: 5,
+                    gpio_relay: 19,
                     enable: true,
                 },
                 Tally {
                     id_console: 1,
                     id_fader: 2,
-                    gpio: 6,
+                    gpio_relay: 13,
                     enable: true,
                 },
                 Tally {
                     id_console: 1,
                     id_fader: 3,
-                    gpio: 13,
+                    gpio_relay: 6,
                     enable: true,
                 },
                 Tally {
                     id_console: 1,
                     id_fader: 4,
-                    gpio: 19,
+                    gpio_relay: 5,
                     enable: true,
                 },
                 Tally {
                     id_console: 1,
                     id_fader: 255,
-                    gpio: 26,
+                    gpio_relay: 26,
                     enable: true,
                 },
             ],

@@ -1,6 +1,6 @@
 async function get_config() {
     var tally_config;
-    const res = await fetch("http://0.0.0.0:9000/getconfig")
+    const res = await fetch("http://10.216.1.80:9000/getconfig")
       .catch((error) => {
         alert("ERRO: Falha na conexão com a API.");
       });
@@ -14,22 +14,22 @@ function initialFill(cfg){
 
     document.getElementById("id_console_tally_1").value = cfg.tallys[0].id_console;
     document.getElementById("fader_tally_1").value = cfg.tallys[0].id_fader;
-    document.getElementById("gpio_tally_1").value = cfg.tallys[0].gpio;
+    document.getElementById("gpio_tally_1").value = cfg.tallys[0].gpio_relay;
 
     document.getElementById("id_console_tally_2").value = cfg.tallys[1].id_console;
     document.getElementById("fader_tally_2").value = cfg.tallys[1].id_fader;
-    document.getElementById("gpio_tally_2").value = cfg.tallys[1].gpio;
+    document.getElementById("gpio_tally_2").value = cfg.tallys[1].gpio_relay;
 
     document.getElementById("id_console_tally_3").value = cfg.tallys[2].id_console;
     document.getElementById("fader_tally_3").value = cfg.tallys[2].id_fader;
-    document.getElementById("gpio_tally_3").value = cfg.tallys[2].gpio;
+    document.getElementById("gpio_tally_3").value = cfg.tallys[2].gpio_relay;
 
     document.getElementById("id_console_tally_4").value = cfg.tallys[3].id_console;
     document.getElementById("fader_tally_4").value = cfg.tallys[3].id_fader;
-    document.getElementById("gpio_tally_4").value = cfg.tallys[3].gpio;
+    document.getElementById("gpio_tally_4").value = cfg.tallys[3].gpio_relay;
 
     document.getElementById("id_console_tally_5").value = cfg.tallys[4].id_console;
-    document.getElementById("gpio_tally_5").value = cfg.tallys[4].gpio;
+    document.getElementById("gpio_tally_5").value = cfg.tallys[4].gpio_relay;
 }
 
 function validateIPaddress(ipaddress) {  
@@ -90,37 +90,37 @@ async function reconfig() {
             {
               "id_console": console_tally_1,
               "id_fader": fader_tally_1,
-              "gpio": 5,
+              "gpio_relay": 19,
               "enable": true
             },
             {
               "id_console": console_tally_2,
               "id_fader": fader_tally_2,
-              "gpio": 6,
+              "gpio_relay": 13,
               "enable": true
             },
             {
               "id_console": console_tally_3,
               "id_fader": fader_tally_3,
-              "gpio": 13,
+              "gpio_relay": 6,
               "enable": true
             },
             {
               "id_console": console_tally_4,
               "id_fader": fader_tally_4,
-              "gpio": 19,
+              "gpio_relay": 5,
               "enable": true
             },
             {
               "id_console": console_tally_cr,
               "id_fader": 255,
-              "gpio": 26,
+              "gpio_relay": 26,
               "enable": true
             },
           ]
     };
 
-    const send_req = await fetch("http://0.0.0.0:9000/reconfig", {
+    const send_req = await fetch("http://10.216.1.80:9000/reconfig", {
         method: "POST",
         body: JSON.stringify(tally_config),
         headers: {
