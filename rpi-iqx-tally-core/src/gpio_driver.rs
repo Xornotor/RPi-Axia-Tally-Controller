@@ -16,21 +16,10 @@ pub fn init_gpio(gpio: &Gpio, tally_cfg: &TallyConfig) -> Result<Vec<OutputPin>,
     Ok(tally_pins)
 }
 
-pub fn reset_all_gpio(pins: &mut Vec<OutputPin>, tally_cfg: &TallyConfig) {
-    let mut cr_tally_pin = 0;
-    for tally in &tally_cfg.tallys {
-        if tally.id_fader == 255 {
-            cr_tally_pin = tally.gpio_relay;
-            break;
-        }
-    }
-
+// Relays active on low state. Reset function puts the outputs on high state.
+pub fn reset_all_gpio(pins: &mut Vec<OutputPin>) {
     for pin in pins {
-        if pin.pin() == cr_tally_pin {
-            pin.set_low();
-        } else {
-            pin.set_high();
-        }
+        pin.set_high();
     }
 }
 
@@ -54,8 +43,6 @@ pub fn decode_receivers_to_gpio(
 
         let (console_number, fader_number, state) = info_tuple;
 
-        let invert_logic = fader_number != 255;
-
         let mut tally_pin = 0;
         for tally in &tally_cfg.tallys {
             if tally.id_console == console_number && tally.id_fader == fader_number {
@@ -69,17 +56,9 @@ pub fn decode_receivers_to_gpio(
             for pin in &mut tally_pins.iter_mut() {
                 if pin.pin() == tally_pin {
                     if state {
-                        if invert_logic {
-                            pin.set_low();
-                        } else {
-                            pin.set_high();
-                        }
+                        pin.set_low();
                     } else {
-                        if invert_logic {
-                            pin.set_high();
-                        } else {
-                            pin.set_low();
-                        }
+                        pin.set_high();
                     }
                     break;
                 }

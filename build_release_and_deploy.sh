@@ -16,4 +16,3 @@ sshpass -p tallyctrl ssh -t ${TARGET_HOST} "sudo mv /home/tallyctrl/rpi-iqx-tall
                                            sudo pkill screen && \
                                            cd /app && \
                                            sudo screen -d -m ./rpi-iqx-tally-core"
-#sshpass -p tallyctrl ssh -t ${TARGET_HOST} sudo reboot
