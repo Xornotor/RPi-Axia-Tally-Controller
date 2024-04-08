@@ -35,4 +35,4 @@ The backend was developed in Rust, and consists of a multithreaded application t
 | Tally 4      | 5            |
 | Control Room | 26           |
 
-All pins are active on low state.
+All pins are active on low state, except for the CR tally.
